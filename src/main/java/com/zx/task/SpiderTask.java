@@ -21,11 +21,6 @@ public class SpiderTask extends BaseTask {
     private String ip;
     private int port;
 
-    /**
-     * 弄个WAIT_TIME -  WAIT_TIME+3的随机数，防止大部分任务同时成功
-     * 所以WAIT_TIME的值需要设置的小一点
-     */
-    private final  int waitTime = new Random().nextInt(3000) + ConfigUtil.WAIT_TIME;
 
 
     public SpiderTask(String taskName, Integer number, String ip, int port){
@@ -39,6 +34,7 @@ public class SpiderTask extends BaseTask {
 
     @Override
     public void run() {
+
         spider(ip, port);
     }
 
@@ -55,24 +51,28 @@ public class SpiderTask extends BaseTask {
             htmlUnitUtil.setJS(webClient);
 
             LOGGER.info(taskName + ": " + number + " start! 使用ip:" + ip + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.get());
+
+            //每个线程开启后随机停止0-3000ms，防止任务同时访问页面
+            Thread.sleep((int)(Math.random() * 3000));
+
             //获取第一个页面
             final HtmlPage page = (HtmlPage) webClient.getPage(ConfigUtil.SPIDER_PATH);
 
-            Thread.sleep(waitTime);
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取并点击第一个下载按钮
             final HtmlElement freeDownLink = page.getHtmlElementById("free_down_link");
             LOGGER.info(taskName + ": " + number + " 爬取到第一个页面，标题为：" + page.getTitleText());
             HtmlPage page2 = (HtmlPage)freeDownLink.click();
 
-            Thread.sleep(waitTime);
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取并点击第二个下载按钮
             final HtmlElement freeDownLink2 = page2.getHtmlElementById("free_down_link");
             LOGGER.info(taskName + ": " + number + " 爬取到第二个页面，标题为：" + page2.getTitleText());
 
-            HtmlPage response = (HtmlPage)freeDownLink2.click();
-            Thread.sleep(waitTime);
+            freeDownLink2.click();
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 //            InputStream inputStream = response.getWebResponse().getContentAsStream();
 //            LOGGER.info(taskName + ": " + number + "开始下载！");
 //            FileUtils.copyToFile(inputStream, new File("F:/zhengxing/download/" + number + ".rar"));

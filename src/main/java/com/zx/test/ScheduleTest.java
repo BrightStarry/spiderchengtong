@@ -30,13 +30,11 @@ public class ScheduleTest {
 //            System.out.println("wake");
 //            RedisUtil.blockGetValueByList("ip");
 //        }
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
-        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(Math.random() * 3000);
+        System.out.println(Math.random() * 3000);
+        System.out.println(Math.random() * 3000);
+        System.out.println(Math.random() * 3000);
+        System.out.println(Math.random() * 3000);
+
     }
 }
