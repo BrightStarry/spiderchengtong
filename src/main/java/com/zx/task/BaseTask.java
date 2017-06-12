@@ -28,10 +28,10 @@ public abstract class BaseTask implements Runnable {
         //输出任务名，是否执行成功，执行耗时
         if(status){
             int i = ConfigUtil.count_success.incrementAndGet();
-            LOGGER.info(taskName + ":" +number +"-END-result:" + status +"-time：" + ((System.currentTimeMillis() - createTime)/1000) + "s-成功数："+ i + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.decrementAndGet());
+            LOGGER.info(taskName + ":" + number +"-END-time：" + ((System.currentTimeMillis() - createTime)/1000) + "s-成功数："+ i + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.decrementAndGet());
         }else{
             int i = ConfigUtil.count_failed.incrementAndGet();
-            LOGGER.warn(taskName +":" +number +"-END-result:" + status +"-time：" + ((System.currentTimeMillis() - createTime)/1000) + "s-失败数：" + i + "失败原因:" + error + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.decrementAndGet());
+            LOGGER.warn(taskName +":" + number +"-END-time：" + ((System.currentTimeMillis() - createTime)/1000) + "s-失败数：" + i + "失败原因:" + error + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.decrementAndGet());
         }
     }
 

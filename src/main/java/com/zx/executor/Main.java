@@ -12,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
 /**
@@ -33,14 +34,15 @@ public class Main {
         ConfigUtil.initConfig();
         //输出配置
         ConfigUtil.printConfig();
+
         this.spiderExecutor = Executors.newFixedThreadPool(ConfigUtil.THREAD_NUMBER);
-        this.getIPExecutor = Executors.newScheduledThreadPool(1);
     }
 
     /**
      * 开启ip定时获取任务
      */
     public void scheduleGetIp(){
+        this.getIPExecutor = Executors.newScheduledThreadPool(1);
         //执行ip获取任务
         GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.ip_count.incrementAndGet());
         getIPExecutor.scheduleAtFixedRate(getIPTask, 0, ConfigUtil.GET_IP_INTERVAL, TimeUnit.SECONDS);
@@ -56,7 +58,12 @@ public class Main {
             if(ConfigUtil.IS_MASTER){
                 scheduleGetIp();
             }
+            //线程数
             final int  threadNumber= ConfigUtil.THREAD_NUMBER;
+            //运行程序数
+            final AtomicInteger runingCount = ConfigUtil.RUNING_COUNT;
+            //运行线程总数
+            final AtomicInteger count  = ConfigUtil.count;
             //循环执行主任务
             while (true) {
                 //如果正在运行的任务小于标准数，则新建任务，否则睡眠5s
@@ -71,13 +78,13 @@ public class Main {
                         //成功获取，则分割ip和poet
                         String[] strs = ipAndPort.split(":");
                         //执行主任务
-                        SpiderTask spiderTask = new SpiderTask("主任务", ConfigUtil.count.incrementAndGet(), strs[0], Integer.valueOf(strs[1]));
+                        SpiderTask spiderTask = new SpiderTask("主任务", count.incrementAndGet(), strs[0], Integer.valueOf(strs[1]));
                         spiderExecutor.execute(spiderTask);
                         //运行线程数+1
-                        ConfigUtil.RUNING_COUNT.incrementAndGet();
+                        runingCount.incrementAndGet();
                     }
                 }
-                Thread.sleep(2000);
+                Thread.sleep(4000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

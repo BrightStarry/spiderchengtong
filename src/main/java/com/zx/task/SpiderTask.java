@@ -18,11 +18,11 @@ import java.util.Random;
  */
 public class SpiderTask extends BaseTask {
 
+    //htmlUnit工具类
+    private static final HtmlUnitUtil HTML_UNIT_UTIL = HtmlUnitUtil.getInstance();
+
     private String ip;
     private int port;
-
-
-
 
     public SpiderTask(String taskName, Integer number, String ip, int port){
         this.number = number;
@@ -31,7 +31,6 @@ public class SpiderTask extends BaseTask {
         this.ip = ip;
         this.port =port;
     }
-
 
     @Override
     public void run() {
@@ -44,15 +43,14 @@ public class SpiderTask extends BaseTask {
      */
     private  void spider(String ip,int port) {
 
-        //htmlUnit工具类
-        final HtmlUnitUtil htmlUnitUtil = HtmlUnitUtil.getInstance();
+
         try(
-                final WebClient webClient = htmlUnitUtil.getWebClient(number % 2 == 0 ? BrowserVersion.CHROME : BrowserVersion.EDGE,ip,port)
+                final WebClient webClient = HTML_UNIT_UTIL.getWebClient(number % 2 == 0 ? BrowserVersion.CHROME : BrowserVersion.EDGE,ip,port)
         ){
             //设置 等待一定时间，等待js加载
-            htmlUnitUtil.setJS(webClient);
+            HTML_UNIT_UTIL.setJS(webClient);
 
-            LOGGER.info(taskName + ": " + number + " start! 使用ip:" + ip + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.get());
+            LOGGER.info(taskName + ": " + number + " start! 使用ip:" + ip);
 
             Thread.sleep(ConfigUtil.WAIT_TIME);
 
