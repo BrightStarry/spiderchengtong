@@ -1,7 +1,9 @@
 package com.zx.test;
 
+import com.zx.util.ConfigUtil;
 import com.zx.util.RedisUtil;
 
+import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -14,20 +16,27 @@ import java.util.concurrent.TimeUnit;
 public class ScheduleTest {
 
     public static void main(String[] args) throws Exception {
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
-        //每10s执行一次该任务
-        ses.scheduleAtFixedRate(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("定时任务执行");
-            }
-        },0,3, TimeUnit.SECONDS);
-        while(true){
-            System.out.println("sleep");
-            Thread.sleep(5000);
-            System.out.println("wake");
-            RedisUtil.blockGetValueByList("ip");
-        }
-
+//        ScheduledExecutorService ses = Executors.newScheduledThreadPool(1);
+//        //每10s执行一次该任务
+//        ses.scheduleAtFixedRate(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.out.println("定时任务执行");
+//            }
+//        },0,3, TimeUnit.SECONDS);
+//        while(true){
+//            System.out.println("sleep");
+//            Thread.sleep(5000);
+//            System.out.println("wake");
+//            RedisUtil.blockGetValueByList("ip");
+//        }
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
+        System.out.println(new Random().nextInt(3000) + 15000);
     }
 }
