@@ -43,8 +43,6 @@ public class SpiderTask extends BaseTask {
      * 爬虫方法
      */
     private  void spider(String ip,int port) {
-        //随机数
-        final int random = ConfigUtil.WAIT_TIME + (int)(Math.random() * 3000);
 
         //htmlUnit工具类
         final HtmlUnitUtil htmlUnitUtil = HtmlUnitUtil.getInstance();
@@ -56,13 +54,12 @@ public class SpiderTask extends BaseTask {
 
             LOGGER.info(taskName + ": " + number + " start! 使用ip:" + ip + "-当前运行线程数：" + ConfigUtil.RUNING_COUNT.get());
 
-            //每个线程开启后随机停止0-3000ms，防止任务同时访问页面
-            Thread.sleep(random);
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取第一个页面
             final HtmlPage page = (HtmlPage) webClient.getPage(ConfigUtil.SPIDER_PATH);
 
-            Thread.sleep(random);
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取并点击第一个下载按钮
             final HtmlElement freeDownLink = page.getHtmlElementById("free_down_link");
@@ -76,7 +73,7 @@ public class SpiderTask extends BaseTask {
             LOGGER.info(taskName + ": " + number + " 爬取到第二个页面，标题为：" + page2.getTitleText());
 
             freeDownLink2.click();
-            Thread.sleep(random);
+            Thread.sleep(ConfigUtil.WAIT_TIME);
 //            InputStream inputStream = response.getWebResponse().getContentAsStream();
 //            LOGGER.info(taskName + ": " + number + "开始下载！");
 //            FileUtils.copyToFile(inputStream, new File("F:/zhengxing/download/" + number + ".rar"));
