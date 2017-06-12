@@ -1,0 +1,143 @@
+package com.zx.util;
+
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
+
+/**
+ * 配置工具类
+ */
+public class ConfigUtil {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUtil.class);
+
+    //htmlUnit超时时间
+    public static int TIMEOUT;
+    //htmlUnit等待页面加载时间
+    public static int WAIT_TIME;
+
+    //主线程数
+    public static int THREAD_NUMBER;
+    //获取ip间隔时间,s
+    public static int GET_IP_INTERVAL;
+    //ip提取路径
+    public static String IP_PATH;
+    //爬取的路径
+    public static String SPIDER_PATH;
+    //Redis中的key
+    public static String IP_QUEUE_NAME;
+
+    //Redis ip
+    public static String REDIS_IP;
+    //Redis port
+    public static int REDIS_PORT;
+
+    //是否是主进程，主进程则开启定时抓取ip任务
+    public static boolean IS_MASTER;
+
+    //执行总数
+    public static volatile AtomicInteger count = new AtomicInteger(0);
+    //成功总数
+    public static volatile AtomicInteger count_success = new AtomicInteger(0);
+    //失败总数
+    public static volatile AtomicInteger count_failed = new AtomicInteger(0);
+
+    //爬取ip总数
+    public static volatile AtomicInteger ip_count = new AtomicInteger(0);
+
+    //当前正在执行的线程总数
+    public static volatile AtomicInteger RUNING_COUNT = new AtomicInteger(0);
+
+
+    /**
+     * 获取属性并赋值
+     */
+    public static void initConfig() {
+        Map<String, String> config = getProperties("config");
+        if (StringUtils.isNotBlank(config.get("TIMEOUT"))) {
+            TIMEOUT = Integer.valueOf(config.get("TIMEOUT"));
+        }
+        if (StringUtils.isNotBlank(config.get("WAIT_TIME"))) {
+            WAIT_TIME = Integer.valueOf(config.get("WAIT_TIME"));
+        }
+        if (StringUtils.isNotBlank(config.get("THREAD_NUMBER"))) {
+            THREAD_NUMBER = Integer.valueOf(config.get("THREAD_NUMBER"));
+        }
+        if (StringUtils.isNotBlank(config.get("GET_IP_INTERVAL"))) {
+            GET_IP_INTERVAL = Integer.valueOf(config.get("GET_IP_INTERVAL"));
+        }
+        if (StringUtils.isNotBlank(config.get("IP_PATH"))) {
+            IP_PATH = config.get("IP_PATH");
+        }
+        if (StringUtils.isNotBlank(config.get("IP_QUEUE_NAME"))) {
+            IP_QUEUE_NAME = config.get("IP_QUEUE_NAME");
+        }
+        if (StringUtils.isNotBlank(config.get("SPIDER_PATH"))) {
+            SPIDER_PATH = config.get("SPIDER_PATH");
+        }
+        if (StringUtils.isNotBlank(config.get("REDIS_IP"))) {
+            REDIS_IP = config.get("REDIS_IP");
+        }
+        if (StringUtils.isNotBlank(config.get("REDIS_PORT"))) {
+            REDIS_PORT = Integer.valueOf(config.get("REDIS_PORT"));
+        }
+        if (StringUtils.isNotBlank(config.get("IS_MASTER"))) {
+            IS_MASTER = Boolean.valueOf(config.get("IS_MASTER"));
+        }
+    }
+
+    /**
+     * 输出所有值
+     */
+    public static void printConfig(){
+        LOGGER.info("TIMEOUT:" + TIMEOUT);
+        LOGGER.info("WAIT_TIME:" + WAIT_TIME);
+        LOGGER.info("THREAD_NUMBER:" + THREAD_NUMBER);
+        LOGGER.info("GET_IP_INTERVAL:" + GET_IP_INTERVAL);
+        LOGGER.info("IP_PATH:" + IP_PATH);
+        LOGGER.info("IP_QUEUE_NAME:" + IP_QUEUE_NAME);
+        LOGGER.info("SPIDER_PATH:" + SPIDER_PATH);
+        LOGGER.info("REDIS_IP:" + REDIS_IP);
+        LOGGER.info("REDIS_PORT:" + REDIS_PORT);
+        LOGGER.info("IS_MASTER:" + IS_MASTER);
+    }
+
+
+    /**
+     * 读取配置文件
+     */
+    public static Map<String, String> getProperties(String fileName) {
+        Properties properties = new Properties();
+        Map<String, String> map = new HashMap<>();
+        try {
+            /**
+             * 项目CLASSPATH目录
+             */
+//            final InputStream in = Properties.class.getResourceAsStream("/" + fileName + ".properties");//静态方法
+//        final InputStream in = getClass().getResourceAsStream("test.properties"); //普通方法
+            /**
+             * 硬盘目录
+             */
+            final InputStream in = new FileInputStream(new File("D:/zhengxing/" + fileName + ".properties"));
+            properties.load(new InputStreamReader(in, "UTF-8"));
+            Enumeration<?> enumeration = properties.propertyNames();
+            while (enumeration.hasMoreElements()) {
+                String key = (String) enumeration.nextElement();
+                String value = properties.getProperty(key);
+                map.put(key, value);
+            }
+            return map;
+        } catch (IOException e) {
+            LOGGER.warn("读取配置文件错误！");
+        }
+        return map;
+    }
+
+
+}
