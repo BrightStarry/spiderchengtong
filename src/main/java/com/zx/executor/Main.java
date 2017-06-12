@@ -56,12 +56,13 @@ public class Main {
             if(ConfigUtil.IS_MASTER){
                 scheduleGetIp();
             }
+            final int  threadNumber= ConfigUtil.THREAD_NUMBER;
             //循环执行主任务
             while (true) {
                 //如果正在运行的任务小于标准数，则新建任务，否则睡眠5s
-                if (ConfigUtil.RUNING_COUNT.get() < ConfigUtil.THREAD_NUMBER) {
+                if (ConfigUtil.RUNING_COUNT.get() < threadNumber) {
                     //每次线程数少于标准线程数，则 增加数目 = 标准数 - 当前数
-                    while (ConfigUtil.RUNING_COUNT.get() < ConfigUtil.THREAD_NUMBER) {
+                    while (ConfigUtil.RUNING_COUNT.get() < threadNumber) {
                         /**
                          * 获取ip
                          */
@@ -76,7 +77,7 @@ public class Main {
                         ConfigUtil.RUNING_COUNT.incrementAndGet();
                     }
                 }
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();

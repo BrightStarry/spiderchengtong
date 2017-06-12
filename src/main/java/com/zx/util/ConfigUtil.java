@@ -124,7 +124,14 @@ public class ConfigUtil {
             /**
              * 硬盘目录
              */
-            final InputStream in = new FileInputStream(new File("D:/zhengxing/" + fileName + ".properties"));
+            File file = null;
+            //判断系统类型
+            if((System.getProperty("os.name").toLowerCase()).contains("linux")){
+                file = new File(File.separator + "zhengxing" + File.separator + fileName + ".properties");
+            }else{
+                file = new File("D:/zhengxing/" + fileName + ".properties");
+            }
+            final InputStream in = new FileInputStream(file);
             properties.load(new InputStreamReader(in, "UTF-8"));
             Enumeration<?> enumeration = properties.propertyNames();
             while (enumeration.hasMoreElements()) {

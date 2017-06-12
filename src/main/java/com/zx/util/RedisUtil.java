@@ -46,6 +46,7 @@ public class RedisUtil {
                 LOGGER.debug("获取 jedis 时失败！error:" + e.getCause().getMessage());
             }
             return jedis;
+
     }
 
     /**
