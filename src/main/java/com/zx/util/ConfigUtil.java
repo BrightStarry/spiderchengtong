@@ -41,6 +41,9 @@ public class ConfigUtil {
     //是否是主进程，主进程则开启定时抓取ip任务
     public static boolean IS_MASTER;
 
+    //主任务是否运行，持续开启新线程
+    public static boolean IS_RUN = Boolean.TRUE;
+
     //执行总数
     public static volatile AtomicInteger count = new AtomicInteger(0);
     //成功总数

@@ -26,6 +26,7 @@ public class Main {
     //ip任务执行器
     private ScheduledExecutorService getIPExecutor;
 
+
     /**
      * 构造 两个任务执行器
      */
@@ -52,8 +53,7 @@ public class Main {
     /**
      * 任务运行
      */
-    public void start() {
-        try {
+    public void start() throws Exception {
             //如果是主进程则开启定时获取ip任务
             if(ConfigUtil.IS_MASTER){
                 scheduleGetIp();
@@ -65,11 +65,11 @@ public class Main {
             //运行线程总数
             final AtomicInteger count  = ConfigUtil.count;
             //循环执行主任务
-            while (true) {
+            while (ConfigUtil.IS_RUN) {
                 //如果正在运行的任务小于标准数，则新建任务，否则睡眠5s
-                if (ConfigUtil.RUNING_COUNT.get() < threadNumber) {
+                if (runingCount.get() < threadNumber) {
                     //每次线程数少于标准线程数，则 增加数目 = 标准数 - 当前数
-                    while (ConfigUtil.RUNING_COUNT.get() < threadNumber) {
+                    while (runingCount.get() < threadNumber) {
                         /**
                          * 获取ip
                          */
@@ -84,17 +84,46 @@ public class Main {
                         runingCount.incrementAndGet();
                     }
                 }
-                Thread.sleep(4000);
+                Thread.sleep(3000);
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+
+    }
+
+    /**
+     * 异常处理
+     */
+    public static void restart() throws Exception {
+        LOGGER.info("正在处理该未捕获异常");
+        //先停止运行程序
+        ConfigUtil.IS_RUN = false;
+        //然后等待所有子任务结束
+        while (ConfigUtil.RUNING_COUNT.get() != 0){
+            LOGGER.info("正在等待所有子任务结束。。。");
+            Thread.sleep(3000);
         }
+        LOGGER.info("所有子任务已经结束，重启main方法");
+        //重新运行main方法
+        Main.main(null);
     }
 
-    public static void main(String[] args) throws Exception {
-        LOGGER.info("任务开始-----------------");
-        Main main = new Main();
-        main.start();
+    public static void main(String[] args) {
+        try {
+            LOGGER.info("任务开始-----------------");
+            Main main = new Main();
+            main.start();
+        } catch (Exception e) {
+            //如果发生未知异常，
+            //打印异常信息
+            LOGGER.error("！！！！！！！！！！！发生未捕获异常，error：" + e.getCause().getMessage());
+            //执行异常处理方法
+            try {
+                Main.restart();
+            } catch (Exception e1) {
+                LOGGER.error("未捕获异常处理失败，程序终止！error:" + e1.getCause().getMessage());
+            }
+
+        }
 
     }
+
 }
