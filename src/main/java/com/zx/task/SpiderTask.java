@@ -7,6 +7,7 @@ import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.zx.util.ConfigUtil;
 import com.zx.util.HtmlUnitUtil;
+import com.zx.util.SeleniumUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
@@ -35,13 +36,23 @@ public class SpiderTask extends BaseTask {
     @Override
     public void run() {
 
-        spider(ip, port);
+        spider();
+    }
+
+    /**
+     * 爬虫方法2
+     */
+    private void spider2(){
+        SeleniumUtil.run(ip,port);
+
+        this.status = true;
+        destroy(status,null);
     }
 
     /**
      * 爬虫方法
      */
-    private  void spider(String ip,int port) {
+    private  void spider() {
 
 
         try(

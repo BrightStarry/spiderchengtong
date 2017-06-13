@@ -23,22 +23,16 @@
     <commons-io.version>2.5</commons-io.version>
     <commons-pool2.version>2.4.2</commons-pool2.version>
     <jedis.version>2.9.0</jedis.version>
+    <selenium.version>3.4.0</selenium.version>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.12</version>
-      <scope>test</scope>
+      <version>${junit.version}</version>
     </dependency>
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>${junit.version}</version>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
@@ -91,6 +85,30 @@
       <artifactId>jedis</artifactId>
       <version>${jedis.version}</version>
     </dependency>
+
+
+    <dependency>
+      <groupId>org.seleniumhq.selenium</groupId>
+      <artifactId>selenium-java</artifactId>
+      <version>${selenium.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>io.github.bonigarcia</groupId>
+      <artifactId>webdrivermanager</artifactId>
+      <version>1.6.2</version>
+    </dependency>
+
+
+
+
+
+
+
+
+
+
+
   </dependencies>
 
 

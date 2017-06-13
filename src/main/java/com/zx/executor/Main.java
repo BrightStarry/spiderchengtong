@@ -4,14 +4,12 @@ import com.zx.task.GetIPTask;
 import com.zx.task.SpiderTask;
 import com.zx.util.ConfigUtil;
 import com.zx.util.RedisUtil;
+import com.zx.util.ThreadExceptionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 
@@ -43,9 +41,18 @@ public class Main {
      * 开启ip定时获取任务
      */
     public void scheduleGetIp(){
-        this.getIPExecutor = Executors.newScheduledThreadPool(1);
+        //指定线程工厂
+        this.getIPExecutor = Executors.newScheduledThreadPool(1, new ThreadFactory() {
+            //在线程工厂中创建线程，并指定每个线程的异常处理方法
+            @Override
+            public Thread newThread(Runnable r) {
+                Thread thread = new Thread(r);
+                thread.setUncaughtExceptionHandler(new ThreadExceptionHandler());
+                return thread;
+            }
+        });
         //执行ip获取任务
-        GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.ip_count.incrementAndGet());
+        GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.ip_count.incrementAndGet());//这个runnable最终会被ThreadFactory的newThread方法再包裹一次
         getIPExecutor.scheduleAtFixedRate(getIPTask, 0, ConfigUtil.GET_IP_INTERVAL, TimeUnit.SECONDS);
 
     }
@@ -112,18 +119,8 @@ public class Main {
             Main main = new Main();
             main.start();
         } catch (Exception e) {
-            //如果发生未知异常，
-            //打印异常信息
-            LOGGER.error("！！！！！！！！！！！发生未捕获异常，error：" + e.getCause().getMessage());
-            //执行异常处理方法
-            try {
-                Main.restart();
-            } catch (Exception e1) {
-                LOGGER.error("未捕获异常处理失败，程序终止！error:" + e1.getCause().getMessage());
-            }
-
+            e.printStackTrace();
         }
-
     }
 
 }
