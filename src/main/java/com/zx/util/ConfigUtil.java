@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -28,8 +25,8 @@ public class ConfigUtil {
     public static int GET_IP_INTERVAL;
     //ip提取路径
     public static String IP_PATH;
-    //爬取的路径
-    public static String SPIDER_PATH;
+    //爬取的路径集合
+    public static List<String> SPIDER_PATHS;
     //Redis中的key
     public static String IP_QUEUE_NAME;
 
@@ -82,7 +79,7 @@ public class ConfigUtil {
             IP_QUEUE_NAME = config.get("IP_QUEUE_NAME");
         }
         if (StringUtils.isNotBlank(config.get("SPIDER_PATH"))) {
-            SPIDER_PATH = config.get("SPIDER_PATH");
+            SPIDER_PATHS = Arrays.asList(config.get("SPIDER_PATH").split(";"));
         }
         if (StringUtils.isNotBlank(config.get("REDIS_IP"))) {
             REDIS_IP = config.get("REDIS_IP");
@@ -105,7 +102,7 @@ public class ConfigUtil {
         LOGGER.info("GET_IP_INTERVAL:" + GET_IP_INTERVAL);
         LOGGER.info("IP_PATH:" + IP_PATH);
         LOGGER.info("IP_QUEUE_NAME:" + IP_QUEUE_NAME);
-        LOGGER.info("SPIDER_PATH:" + SPIDER_PATH);
+        LOGGER.info("SPIDER_PATH:" + SPIDER_PATHS);
         LOGGER.info("REDIS_IP:" + REDIS_IP);
         LOGGER.info("REDIS_PORT:" + REDIS_PORT);
         LOGGER.info("IS_MASTER:" + IS_MASTER);

@@ -11,6 +11,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -20,6 +21,8 @@ public class SpiderTask extends BaseTask {
 
     //htmlUnit工具类
     private static final HtmlUnitUtil HTML_UNIT_UTIL = HtmlUnitUtil.getInstance();
+
+
 
     private String ip;
     private int port;
@@ -55,7 +58,7 @@ public class SpiderTask extends BaseTask {
             Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取第一个页面
-            final HtmlPage page = (HtmlPage) webClient.getPage(ConfigUtil.SPIDER_PATH);
+            final HtmlPage page = (HtmlPage) webClient.getPage(ConfigUtil.SPIDER_PATHS.get(number % ConfigUtil.SPIDER_PATHS.size()));
 
             Thread.sleep(ConfigUtil.WAIT_TIME);
 
