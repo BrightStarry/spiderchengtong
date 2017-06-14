@@ -47,7 +47,7 @@ public class TimeUtil {
      */
     public static Integer getThreadNumber(){
         //每个时间段对应的线程数
-        Integer[] MAPPER = new Integer[]{ConfigUtil.THREAD_NUMBER + 20, ConfigUtil.THREAD_NUMBER / 10 + 10};
+        Integer[] MAPPER = new Integer[]{ConfigUtil.THREAD_NUMBER, ConfigUtil.THREAD_NUMBER / 10 + 10};
         SimpleDateFormat format = new SimpleDateFormat(TIME_FORMAT);
         final String currentTime = format.format(new Date());
 
