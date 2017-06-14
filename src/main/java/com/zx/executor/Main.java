@@ -28,14 +28,15 @@ public class Main {
     /**
      * 构造 两个任务执行器
      */
-    public Main() {
+    private Main() {
         //加载配置
         ConfigUtil.initConfig();
-        //输出配置
-        ConfigUtil.printConfig();
-
+        //准备
+        SpiderTask.setup();
         this.spiderExecutor = Executors.newFixedThreadPool(ConfigUtil.THREAD_NUMBER);
     }
+
+
 
     /**
      * 开启ip定时获取任务
@@ -115,7 +116,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            LOGGER.info("任务开始-----------------");
+            LOGGER.info("任务开始,爬取的链接数目为{}",ConfigUtil.SPIDER_PATHS.size());
             Main main = new Main();
             main.start();
         } catch (Exception e) {

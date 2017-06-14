@@ -1,3 +1,4 @@
+/*
 package com.zx.util;
 
 import com.thoughtworks.selenium.Selenium;
@@ -7,14 +8,18 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
+*/
 /**
  * selenium 工具类
- */
+ *//*
+
 public class SeleniumUtil {
 
-    /**
+    */
+/**
      * 使用指定ip和port，获取对应的Selenium
-     */
+     *//*
+
     public static Selenium getSelenium(String ip, int port){
         //设置代理
 //        FirefoxProfile profile = new FirefoxProfile();
@@ -35,9 +40,11 @@ public class SeleniumUtil {
         return selenium;
     }
 
-    /**
+    */
+/**
      * 执行爬虫方法
-     */
+     *//*
+
     public static void start(Selenium selenium){
         selenium.open("/fs/14231261-207420331");
         selenium.click("css=em");
@@ -48,9 +55,11 @@ public class SeleniumUtil {
         selenium.waitForPopUp("_blank", "30000");
     }
 
-    /**
+    */
+/**
      * 直接调用该方法，处理所有事情
-     */
+     *//*
+
     public static void run(String ip, int port){
         Selenium selenium = null;
         try{
@@ -74,3 +83,4 @@ public class SeleniumUtil {
 
 
 }
+*/

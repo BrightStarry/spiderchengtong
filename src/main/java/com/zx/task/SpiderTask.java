@@ -1,17 +1,12 @@
 package com.zx.task;
 
 import com.gargoylesoftware.htmlunit.BrowserVersion;
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlElement;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.zx.util.ConfigUtil;
 import com.zx.util.HtmlUnitUtil;
-import com.zx.util.SeleniumUtil;
-import org.apache.commons.io.FileUtils;
 
-import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import java.util.Random;
 
@@ -22,6 +17,15 @@ public class SpiderTask extends BaseTask {
 
     //htmlUnit工具类
     private static final HtmlUnitUtil HTML_UNIT_UTIL = HtmlUnitUtil.getInstance();
+
+    //产升随机数
+    private static final Random random = new Random();
+
+    //链接的数目
+    private  static Integer spiderSize;
+
+    //链接集合
+    private  static List<String> spiderPaths;
 
 
 
@@ -42,15 +46,7 @@ public class SpiderTask extends BaseTask {
         spider();
     }
 
-    /**
-     * 爬虫方法2
-     */
-    private void spider2(){
-        SeleniumUtil.run(ip,port);
 
-        this.status = true;
-        destroy(status,null);
-    }
 
     /**
      * 爬虫方法
@@ -69,7 +65,7 @@ public class SpiderTask extends BaseTask {
             Thread.sleep(ConfigUtil.WAIT_TIME);
 
             //获取第一个页面
-            final HtmlPage page = (HtmlPage) webClient.getPage(ConfigUtil.SPIDER_PATHS.get(number % ConfigUtil.SPIDER_PATHS.size()));
+            final HtmlPage page = (HtmlPage) webClient.getPage(spiderPaths.get(random.nextInt(spiderSize)));
 
             Thread.sleep(ConfigUtil.WAIT_TIME);
 
@@ -95,6 +91,14 @@ public class SpiderTask extends BaseTask {
             this.status = false;
             destroy(status,e.getMessage());
         }
+    }
+
+    /**
+     * 给spiderTask设置static参数
+     */
+    public static void setup(){
+        SpiderTask.spiderPaths = ConfigUtil.SPIDER_PATHS;
+        SpiderTask.spiderSize = ConfigUtil.SPIDER_PATHS.size();
     }
 
 

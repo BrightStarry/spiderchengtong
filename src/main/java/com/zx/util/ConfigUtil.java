@@ -56,7 +56,7 @@ public class ConfigUtil {
 
 
     /**
-     * 获取属性并赋值
+     * 获取属性并赋值，并打印
      */
     public static void initConfig() {
         Map<String, String> config = getProperties("config");
@@ -90,6 +90,7 @@ public class ConfigUtil {
         if (StringUtils.isNotBlank(config.get("IS_MASTER"))) {
             IS_MASTER = Boolean.valueOf(config.get("IS_MASTER"));
         }
+        printConfig();
     }
 
     /**

@@ -1,3 +1,4 @@
+/*
 package com.zx.test;
 
 import com.thoughtworks.selenium.Selenium;
@@ -57,3 +58,4 @@ public class test {
 		selenium.stop();
 	}
 }
+*/
