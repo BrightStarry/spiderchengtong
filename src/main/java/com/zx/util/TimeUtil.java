@@ -22,7 +22,7 @@ public class TimeUtil {
     //白天的开始 --0
     public static final String AM_START = "7:00:00";
     //白天的结束时间
-    public static final String AM_END = "00:00:00";
+    public static final String AM_END = "23:00:00";
 
 //    //下午的开始时间 --1
 //    public static final String PM_START = "12:00:00";
@@ -35,7 +35,7 @@ public class TimeUtil {
 //    public static final String NIGHT_END = "00:00:00";
 
     //深夜的开始时间 --2
-    public static final String NIGHT_START = "00:00:00";
+    public static final String NIGHT_START = "01:00:00";
     //深夜的结束时间
     public static final String NIGHT_END = "07:00:00";
 
@@ -71,7 +71,7 @@ public class TimeUtil {
             Date endDate = format.parse(endTime);
             Date currentDate = format.parse(currentTime);
             //如果在范围之间，返回true
-            if(currentDate.after(startDate) || currentDate.before(endDate))
+            if(currentDate.after(startDate) && currentDate.before(endDate))
                 return true;
         } catch (ParseException e) {
             LOGGER.warn("日期格式转换错误！error:{}",e.getMessage());

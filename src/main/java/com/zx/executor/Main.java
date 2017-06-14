@@ -56,7 +56,7 @@ public class Main {
      */
     public void dynamicThreadNumber(){
         DynamicThreadNumTask task = new DynamicThreadNumTask("动态线程数任务",1);
-        getIPExecutor.scheduleAtFixedRate(task, 0, 3600, TimeUnit.SECONDS);
+        getIPExecutor.scheduleAtFixedRate(task, 0, 3000, TimeUnit.SECONDS);
     }
 
     /**
