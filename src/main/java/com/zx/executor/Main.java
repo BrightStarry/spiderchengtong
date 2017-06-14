@@ -116,7 +116,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-            LOGGER.info("任务开始,爬取的链接数目为{}",ConfigUtil.SPIDER_PATHS.size());
+            LOGGER.info("任务开始");
             Main main = new Main();
             main.start();
         } catch (Exception e) {

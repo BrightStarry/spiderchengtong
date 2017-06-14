@@ -103,7 +103,7 @@ public class ConfigUtil {
         LOGGER.info("GET_IP_INTERVAL:" + GET_IP_INTERVAL);
         LOGGER.info("IP_PATH:" + IP_PATH);
         LOGGER.info("IP_QUEUE_NAME:" + IP_QUEUE_NAME);
-        LOGGER.info("SPIDER_PATH:" + SPIDER_PATHS);
+        LOGGER.info("SPIDER_PATHS:{},SIZE：{}",SPIDER_PATHS,SPIDER_PATHS.size());
         LOGGER.info("REDIS_IP:" + REDIS_IP);
         LOGGER.info("REDIS_PORT:" + REDIS_PORT);
         LOGGER.info("IS_MASTER:" + IS_MASTER);
