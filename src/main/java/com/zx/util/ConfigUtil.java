@@ -42,14 +42,14 @@ public class ConfigUtil {
     public static boolean IS_RUN = Boolean.TRUE;
 
     //执行总数
-    public static volatile AtomicInteger count = new AtomicInteger(0);
+    public static volatile AtomicInteger COUNT = new AtomicInteger(0);
     //成功总数
-    public static volatile AtomicInteger count_success = new AtomicInteger(0);
+    public static volatile AtomicInteger COUNT_SUCCESS = new AtomicInteger(0);
     //失败总数
-    public static volatile AtomicInteger count_failed = new AtomicInteger(0);
+    public static volatile AtomicInteger COUNT_FAILED = new AtomicInteger(0);
 
     //爬取ip总数
-    public static volatile AtomicInteger ip_count = new AtomicInteger(0);
+    public static volatile AtomicInteger IP_COUNT = new AtomicInteger(0);
 
     //当前正在执行的线程总数
     public static volatile AtomicInteger RUNING_COUNT = new AtomicInteger(0);

@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
 
 /**
  * 执行器
@@ -53,7 +52,7 @@ public class Main {
             }
         });
         //执行ip获取任务
-        GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.ip_count.incrementAndGet());//这个runnable最终会被ThreadFactory的newThread方法再包裹一次
+        GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.IP_COUNT.incrementAndGet());//这个runnable最终会被ThreadFactory的newThread方法再包裹一次
         getIPExecutor.scheduleAtFixedRate(getIPTask, 0, ConfigUtil.GET_IP_INTERVAL, TimeUnit.SECONDS);
 
     }
@@ -71,7 +70,7 @@ public class Main {
             //运行程序数
             final AtomicInteger runingCount = ConfigUtil.RUNING_COUNT;
             //运行线程总数
-            final AtomicInteger count  = ConfigUtil.count;
+            final AtomicInteger count  = ConfigUtil.COUNT;
             //循环执行主任务
             while (ConfigUtil.IS_RUN) {
                 //如果正在运行的任务小于标准数，则新建任务，否则睡眠5s
@@ -83,6 +82,9 @@ public class Main {
                          */
                         //从redis获取ip
                         String ipAndPort = RedisUtil.blockGetValueByList(ConfigUtil.IP_QUEUE_NAME);
+                        //如果提取到的为空，跳出本次循环
+                        if(StringUtils.isBlank(ipAndPort))
+                            continue;
                         //成功获取，则分割ip和poet
                         String[] strs = ipAndPort.split(":");
                         //执行主任务
