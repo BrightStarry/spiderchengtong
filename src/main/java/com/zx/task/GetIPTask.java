@@ -29,13 +29,18 @@ public class GetIPTask extends BaseTask{
 
     @Override
     public void run() {
-        getAndSaveIP();
+        try {
+            getAndSaveIP();
+        } catch (Exception e) {
+            //发生异常后，抛出运行时异常，交由ThreadExceptionHandler处理
+            throw new RuntimeException(e.getCause().getMessage());
+        }
     }
 
     /**
      * 提取ip并存入redis
      */
-    public void getAndSaveIP(){
+    public void getAndSaveIP() throws Exception {
         HttpClientUtil httpClientUtil = HttpClientUtil.getInstance();
         ResolveUtil resolveUtil = ResolveUtil.getInstance();
         try {
@@ -52,13 +57,18 @@ public class GetIPTask extends BaseTask{
         } catch (Exception e) {
             LOGGER.warn("获取ip，发送请求时失败！error:"+ e.getCause().getMessage());
         }
+        cure();
     }
 
-    public static void main(String[] args) {
-        //加载配置
-        ConfigUtil.initConfig();
-        new GetIPTask().getAndSaveIP();
+    /**
+     * 每次拉取时，判断线程数是不是过少，如果过少，抛出异常
+     */
+    public void cure() throws Exception {
+        if(ConfigUtil.RUNING_COUNT.get() == 0 ){
+            throw new Exception("cure()方法检测到当前线程数为0！");
+        }
     }
+
 
     public GetIPTask(){}
 }
