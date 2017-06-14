@@ -32,8 +32,7 @@ public class GetIPTask extends BaseTask{
         try {
             getAndSaveIP();
         } catch (Exception e) {
-            //发生异常后，抛出运行时异常，交由ThreadExceptionHandler处理
-            throw new RuntimeException(e.getCause().getMessage());
+
         }
     }
 
@@ -65,7 +64,8 @@ public class GetIPTask extends BaseTask{
      */
     public void cure() throws Exception {
         if(ConfigUtil.RUNING_COUNT.get() == 0 ){
-            throw new Exception("cure()方法检测到当前线程数为0！");
+            //发生异常后，抛出运行时异常，交由ThreadExceptionHandler处理
+            throw new RuntimeException("cure()方法检测到当前线程数为0！");
         }
     }
 
