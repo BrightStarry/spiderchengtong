@@ -1,5 +1,6 @@
 package com.zx.executor;
 
+import com.zx.task.DynamicThreadNumTask;
 import com.zx.task.GetIPTask;
 import com.zx.task.SpiderTask;
 import com.zx.util.ConfigUtil;
@@ -33,6 +34,8 @@ public class Main {
         //准备
         SpiderTask.setup();
         this.spiderExecutor = Executors.newFixedThreadPool(ConfigUtil.THREAD_NUMBER);
+        //指定线程工厂
+        this.getIPExecutor = Executors.newScheduledThreadPool(2);
     }
 
 
@@ -41,20 +44,19 @@ public class Main {
      * 开启ip定时获取任务
      */
     public void scheduleGetIp(){
-        //指定线程工厂
-        this.getIPExecutor = Executors.newScheduledThreadPool(1, new ThreadFactory() {
-            //在线程工厂中创建线程，并指定每个线程的异常处理方法
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = new Thread(r);
-                thread.setUncaughtExceptionHandler(new ThreadExceptionHandler());
-                return thread;
-            }
-        });
+
         //执行ip获取任务
-        GetIPTask getIPTask = new GetIPTask("ip获取任务", ConfigUtil.IP_COUNT.incrementAndGet());//这个runnable最终会被ThreadFactory的newThread方法再包裹一次
+        GetIPTask getIPTask = new GetIPTask("ip获取任务", 1);
         getIPExecutor.scheduleAtFixedRate(getIPTask, 0, ConfigUtil.GET_IP_INTERVAL, TimeUnit.SECONDS);
 
+    }
+
+    /**
+     * 开启动态改变线程数
+     */
+    public void dynamicThreadNumber(){
+        DynamicThreadNumTask task = new DynamicThreadNumTask("动态线程数任务",1);
+        getIPExecutor.scheduleAtFixedRate(task, 0, 3600, TimeUnit.SECONDS);
     }
 
     /**
@@ -65,8 +67,10 @@ public class Main {
             if(ConfigUtil.IS_MASTER){
                 scheduleGetIp();
             }
-            //线程数
-            final int  threadNumber= ConfigUtil.THREAD_NUMBER;
+            //是否开启动态线程数任务
+            if(ConfigUtil.IS_DYNAMIC_THREAD_NUMBER){
+                dynamicThreadNumber();
+            }
             //运行程序数
             final AtomicInteger runingCount = ConfigUtil.RUNING_COUNT;
             //运行线程总数
@@ -74,9 +78,9 @@ public class Main {
             //循环执行主任务
             while (ConfigUtil.IS_RUN) {
                 //如果正在运行的任务小于标准数，则新建任务，否则睡眠5s
-                if (runingCount.get() < threadNumber) {
+                if (runingCount.get() < ConfigUtil.THREAD_NUMBER) {
                     //每次线程数少于标准线程数，则 增加数目 = 标准数 - 当前数
-                    while (runingCount.get() < threadNumber) {
+                    while (runingCount.get() < ConfigUtil.THREAD_NUMBER) {
                         /**
                          * 获取ip
                          */

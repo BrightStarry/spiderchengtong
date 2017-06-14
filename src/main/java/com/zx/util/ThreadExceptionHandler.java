@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 /**
  * 线程内未捕获异常处理类
  */
+@Deprecated
 public class ThreadExceptionHandler implements Thread.UncaughtExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ThreadExceptionHandler.class);
     //未捕获异常处理

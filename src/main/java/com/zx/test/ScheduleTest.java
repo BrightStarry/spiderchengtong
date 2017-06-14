@@ -2,6 +2,7 @@ package com.zx.test;
 
 import com.zx.util.ConfigUtil;
 import com.zx.util.RedisUtil;
+import com.zx.util.TimeUtil;
 
 import java.util.Random;
 import java.util.concurrent.Executors;
@@ -35,10 +36,12 @@ public class ScheduleTest {
 //        System.out.println(Math.random() * 3000);
 //        System.out.println(Math.random() * 3000);
 //        System.out.println(Math.random() * 3000);
-        Random random = new Random();
-        for (int i = 0; i < 10; i++) {
-            System.out.println(random.nextInt(3));
-        }
+//        Random random = new Random();
+//        for (int i = 0; i < 10; i++) {
+//            System.out.println(random.nextInt(3));
+//        }
+        ConfigUtil.initConfig();
+        System.out.println( TimeUtil.getThreadNumber());
 
     }
 }

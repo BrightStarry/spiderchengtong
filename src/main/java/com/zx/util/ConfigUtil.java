@@ -20,7 +20,7 @@ public class ConfigUtil {
     public static int WAIT_TIME;
 
     //主线程数
-    public static int THREAD_NUMBER;
+    public static volatile Integer THREAD_NUMBER;
     //获取ip间隔时间,s
     public static int GET_IP_INTERVAL;
     //ip提取路径
@@ -41,15 +41,15 @@ public class ConfigUtil {
     //主任务是否运行，持续开启新线程
     public static boolean IS_RUN = Boolean.TRUE;
 
+    //是否开启动态线程数
+    public static boolean IS_DYNAMIC_THREAD_NUMBER;
+
     //执行总数
     public static volatile AtomicInteger COUNT = new AtomicInteger(0);
     //成功总数
     public static volatile AtomicInteger COUNT_SUCCESS = new AtomicInteger(0);
     //失败总数
     public static volatile AtomicInteger COUNT_FAILED = new AtomicInteger(0);
-
-    //爬取ip总数
-    public static volatile AtomicInteger IP_COUNT = new AtomicInteger(0);
 
     //当前正在执行的线程总数
     public static volatile AtomicInteger RUNING_COUNT = new AtomicInteger(0);
@@ -90,6 +90,9 @@ public class ConfigUtil {
         if (StringUtils.isNotBlank(config.get("IS_MASTER"))) {
             IS_MASTER = Boolean.valueOf(config.get("IS_MASTER"));
         }
+        if (StringUtils.isNotBlank(config.get("IS_DYNAMIC_THREAD_NUMBER"))) {
+            IS_DYNAMIC_THREAD_NUMBER = Boolean.valueOf(config.get("IS_DYNAMIC_THREAD_NUMBER"));
+        }
         printConfig();
     }
 
@@ -107,6 +110,7 @@ public class ConfigUtil {
         LOGGER.info("REDIS_IP:" + REDIS_IP);
         LOGGER.info("REDIS_PORT:" + REDIS_PORT);
         LOGGER.info("IS_MASTER:" + IS_MASTER);
+        LOGGER.info("IS_DYNAMIC_THREAD_NUMBER:" + IS_DYNAMIC_THREAD_NUMBER);
     }
 
 
